@@ -26,5 +26,8 @@ public class Usuario {
     private String contrasena;
 
     @Column(name = "ESTADO", precision = 1)
-    private Integer estado = 1; 
+    private Integer estado = 1;
+
+    @Column(name = "DNI", unique = true, nullable = false, length = 8)
+    private String dni;
 }

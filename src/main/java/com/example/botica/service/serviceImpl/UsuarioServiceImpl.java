@@ -22,21 +22,26 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public Usuario registrarUsuario(UsuarioRegistroDto registroDto) {
+        if (usuarioRepository.existsByDni(registroDto.getDni())) {
+            throw new RuntimeException("El dni ya se encuentra registrado en el sistema.");
+        }
+
         if (usuarioRepository.existsByCorreo(registroDto.getCorreo())) {
             throw new RuntimeException("El correo ya se encuentra registrado en el sistema.");
         }
 
         Usuario usuario = new Usuario();
+        usuario.setDni(registroDto.getDni());
         usuario.setNombre(registroDto.getNombres());
         usuario.setApellidos(registroDto.getApellidos());
         usuario.setCorreo(registroDto.getCorreo());
-        
+
         String passwordHasheada = passwordEncoder.encode(registroDto.getContrasena());
         usuario.setContrasena(passwordHasheada);
-        
+
         usuario.setEstado(Constantes.ESTADO_ACTIVO);
 
         return usuarioRepository.save(usuario);
     }
-    
+
 }
