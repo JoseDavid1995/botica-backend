@@ -17,3 +17,26 @@ CREATE TABLE BOTICA.USUARIO (
     estado      NUMBER(1) DEFAULT 1,           -- 1: Activo, 0: Inactivo
     CONSTRAINT pk_usuario PRIMARY KEY (id_usuario)
 );
+
+CREATE TABLE BOTICA.MEDICAMENTOS (
+    id_medicamento  NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    codigo_medicamento      VARCHAR2(50) UNIQUE NOT NULL,
+    descripcion_medicamento VARCHAR2(255) NOT NULL,
+    
+    precio_operacion                NUMBER(10, 2) DEFAULT 0,
+    saldo_anterior                  NUMBER(10, 0) DEFAULT 0,
+    ingresos                        NUMBER(10, 0) DEFAULT 0,
+    
+    ventas_unidades                 NUMBER(10, 0) DEFAULT 0,
+    sis_unidades                    NUMBER(10, 0) DEFAULT 0,
+    intervencion_sanitaria_unidades NUMBER(10, 0) DEFAULT 0,
+    
+    ventas_valorizado               NUMBER(10, 2) DEFAULT 0,
+    sis_valorizado                  NUMBER(10, 2) DEFAULT 0,
+    intervencion_sanitaria_valorizado NUMBER(10, 2) DEFAULT 0,
+    
+    stock                           NUMBER(10, 0) DEFAULT 0,
+    fecha_expiracion_medicamento    DATE,
+    
+    CONSTRAINT pk_medicamento PRIMARY KEY (id_medicamento)
+);
