@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.botica.Dto.UsuarioRecuperacionDto;
 import com.example.botica.Dto.UsuarioRegistroDto;
 import com.example.botica.entity.Usuario;
 import com.example.botica.repository.UsuarioRepository;
@@ -18,6 +19,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    @Transactional
+    public Usuario recuperarContrasena(UsuarioRecuperacionDto usuarioRecuperacionDto) {
+        Usuario usuarioExistente = usuarioRepository.findByDni(usuarioRecuperacionDto.getDni())
+                .orElseThrow(() -> new RuntimeException("El dni no se encuentra registrado en el sistema."));
+
+        String passwordHasheada = passwordEncoder.encode(usuarioRecuperacionDto.getContrasena());
+        usuarioExistente.setContrasena(passwordHasheada);
+
+        return usuarioRepository.save(usuarioExistente);
+    }
 
     @Override
     @Transactional

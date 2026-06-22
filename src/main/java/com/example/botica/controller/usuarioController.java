@@ -1,5 +1,6 @@
 package com.example.botica.controller;
 
+import com.example.botica.Dto.UsuarioRecuperacionDto;
 import com.example.botica.Dto.UsuarioRegistroDto;
 import com.example.botica.entity.Usuario;
 import com.example.botica.request.LoginRequest;
@@ -26,17 +27,27 @@ public class usuarioController {
     public ResponseEntity<ApiResponse<Map<String, String>>> login(@RequestBody LoginRequest request) {
         String token = authService.login(request.getCorreo(), request.getContrasena());
         Map<String, String> data = Collections.singletonMap("token", token);
-    
+
         return ResponseEntity.ok(ApiResponse.ok("Inicio de sesión exitoso", data));
+    }
+
+    @PostMapping("/recuperar-contrasena")
+    public ResponseEntity<ApiResponse<Usuario>> recuperarContrasena(
+            @RequestBody UsuarioRecuperacionDto recuperacionDto) {
+        Usuario usuarioCreado = usuarioService.recuperarContrasena(recuperacionDto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Contraseña recuperada exitosamente", usuarioCreado));
     }
 
     @PostMapping("/registrar")
     public ResponseEntity<ApiResponse<Usuario>> registrar(@RequestBody UsuarioRegistroDto registroDto) {
         Usuario usuarioCreado = usuarioService.registrarUsuario(registroDto);
-        
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.ok("Usuario registrado exitosamente", usuarioCreado));
     }
-    
+
 }
